@@ -24,7 +24,7 @@ steps/train_mono.sh --boost-silence 1.25 --nj $n --cmd "$train_cmd" \
 
 echo "$LOGMARK decode mono"
 (
-utils/mkgraph.sh data/lang exp/mono exp/mono/graph
+utils/mkgraph.sh data/graph/lang exp/mono exp/mono/graph
 steps/decode.sh --nj $n --cmd "$train_cmd" \
   exp/mono/graph data/dev exp/mono/decode_dev
 ) || exit 1;
@@ -39,7 +39,7 @@ steps/train_deltas.sh --boost-silence 1.25 --cmd "$train_cmd" \
 
 echo "$LOGMARK decode deltas"
 (
-utils/mkgraph.sh data/lang exp/tri1 exp/tri1/graph
+utils/mkgraph.sh data/graph/lang exp/tri1 exp/tri1/graph
 steps/decode.sh --nj $n --cmd "$train_cmd" \
   exp/tri1/graph data/dev exp/tri1/decode_dev
 ) || exit 1;
