@@ -14,7 +14,6 @@ for x in train dev test; do
     data/${x}_all exp/make_mfcc/${x}_all $H/mfcc/${x}_all
   utils/fix_data_dir.sh data/${x}_all
   utils/validate_data_dir.sh data/${x}_all
-  utils/subset_data_dir.sh data/${x}_all 20 data/$x
 done
 ) || exit 1;
 

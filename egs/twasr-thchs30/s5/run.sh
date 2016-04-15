@@ -5,6 +5,7 @@
 
 H=`pwd`
 n=4
+num_subset=200
 LOGMARK='[TW-ASR]'
 
 corpus_dir=/vagrant
@@ -21,6 +22,10 @@ local/feat_extract.sh $H
 echo "$LOGMARK train mono"
 steps/train_mono.sh --boost-silence 1.25 --nj $n --cmd "$train_cmd" \
   data/train data/lang exp/mono
+
+for x in train dev test; do
+  utils/subset_data_dir.sh data/${x}_all $num_subset data/$x
+done
 
 echo "$LOGMARK decode mono"
 (
