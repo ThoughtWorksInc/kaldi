@@ -22,6 +22,13 @@ echo "$LOGMARK train mono"
 steps/train_mono.sh --boost-silence 1.25 --nj $n --cmd "$train_cmd" \
   data/train data/lang exp/mono
 
+echo "$LOGMARK decode mono"
+(
+utils/mkgraph.sh data/lang exp/mono exp/mono/graph
+steps/decode.sh --nj $n --cmd "$train_cmd" \
+  exp/mono/graph data/dev exp/mono/decode_dev
+) || exit 1;
+
 echo "$LOGMARK train align"
 steps/align_si.sh --boost-silence 1.25 --nj $n --cmd "$train_cmd" \
   data/train data/lang exp/mono exp/mono_ali || exit 1;
@@ -30,7 +37,7 @@ echo "$LOGMARK train deltas"
 steps/train_deltas.sh --boost-silence 1.25 --cmd "$train_cmd" \
   2000 10000 data/train data/lang exp/mono_ali exp/tri1 || exit 1;
 
-echo "$LOGMARK train mkgraph"
+echo "$LOGMARK decode deltas"
 (
 utils/mkgraph.sh data/lang exp/tri1 exp/tri1/graph
 steps/decode.sh --nj $n --cmd "$train_cmd" \
