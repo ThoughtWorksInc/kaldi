@@ -12,7 +12,7 @@ for x in train dev test; do
   # clean data
   cd $dir/data/${x}_all
   rm -rf wav.scp utt2spk spk2utt word.txt phone.txt text
-  for nn in `find $corpus_dir/$x/ -name "*.wav" | sort -u | xargs -i basename {} .wav`; do
+  for nn in `find $corpus_dir/$x/ -name "*.wav" | sort -u | xargs -I{} basename {} .wav`; do
     echo $nn $corpus_dir/$x/$nn.wav >> wav.scp
     echo $nn $nn >> utt2spk
     echo $nn $nn >> spk2utt
