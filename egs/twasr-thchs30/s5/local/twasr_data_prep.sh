@@ -1,0 +1,29 @@
+#!/bin/bash
+
+dir=$1
+corpus_dir=$2
+
+cd $dir
+
+mkdir -p data/{train_all,dev_all,test_all}
+
+(
+for x in train dev test; do
+  # clean data
+  cd $dir/data/${x}_all
+  rm -rf wav.scp utt2spk spk2utt word.txt phone.txt text
+  for nn in `find $corpus_dir/$x/ -name "*.wav" | sort -u | xargs -i basename {} .wav`; do
+    echo $nn $corpus_dir/$x/$nn.wav >> wav.scp
+    echo $nn $nn >> utt2spk
+    echo $nn $nn >> spk2utt
+    echo $nn `sed -n 1p $corpus_dir/data/$nn.wav.trn` >> word.txt
+    echo $nn `sed -n 3p $corpus_dir/data/$nn.wav.trn` >> phone.txt
+  done
+  cp word.txt text
+done
+) || exit 1
+
+# (
+#   rm -rf data/test_phone && cp -R data/test_all data/test_phone  || exit 1
+#   cd data/test_phone && rm text &&  cp phone.txt text || exit 1
+# )
