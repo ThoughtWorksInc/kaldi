@@ -64,3 +64,5 @@ steps/train_sat.sh --cmd "$train_cmd" 2500 15000 \
 
 steps/align_fmllr.sh --nj $n --cmd "$train_cmd" \
   data/train data/lang exp/tri3b exp/tri3b_ali || exit 1;
+
+local/online/run_nnet2.sh

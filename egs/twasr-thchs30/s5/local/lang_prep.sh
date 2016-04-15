@@ -31,4 +31,5 @@ utils/format_lm.sh data/lang data/graph/word.3gram.lm.gz $corpus_dir/data_thchs3
 cp data/lang/topo data/graph/lang/
 cp data/lang/oov.txt data/graph/lang/
 
-utils/validate_lang.pl data/graph/lang || exit 1
+# disable valication to speed up
+# utils/validate_lang.pl data/graph/lang || exit 1
