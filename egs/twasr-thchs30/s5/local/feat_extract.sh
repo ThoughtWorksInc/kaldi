@@ -20,6 +20,6 @@ done
 
 (
 for x in train dev test; do
-  steps/compute_cmvn_stats.sh data/$x exp/make_mfcc/$x $H/mfcc/${x}_all
+  steps/compute_cmvn_stats.sh data/$x exp/make_mfcc/$x $H/mfcc/${x}
 done
 ) || exit 1;
