@@ -5,12 +5,12 @@ corpus_dir=$2
 
 cd $dir
 
-mkdir -p data/{train_all,dev_all,test_all}
+mkdir -p data/{train,dev,test}
 
 (
 for x in train dev test; do
   # clean data
-  cd $dir/data/${x}_all
+  cd $dir/data/${x}
   rm -rf wav.scp utt2spk spk2utt word.txt phone.txt text
   for nn in `find $corpus_dir/$x/ -name "*.wav" | sort -u | xargs -I{} basename {} .wav`; do
     echo $nn $corpus_dir/$x/$nn.wav >> wav.scp

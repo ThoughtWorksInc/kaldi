@@ -14,9 +14,10 @@ set -e
 mkdir -p exp/nnet2_online
 
 if [ $stage -le 1 ]; then
+  mfccdir=mfcc
   for datadir in train dev test; do
     utils/copy_data_dir.sh data/$datadir data/${datadir}_hires
-    steps/make_mfcc.sh --nj 40 --mfcc-config conf/mfcc_hires.conf \
+    steps/make_mfcc.sh --nj 8 --mfcc-config conf/mfcc_hires.conf \
       --cmd "$train_cmd" data/${datadir}_hires exp/make_hires/$datadir $mfccdir || exit 1;
     steps/compute_cmvn_stats.sh data/${datadir}_hires exp/make_hires/$datadir $mfccdir || exit 1;
   done
@@ -26,7 +27,7 @@ if [ $stage -le 2 ]; then
   # We need to build a small system just because we need the LDA+MLLT transform
   # to train the diag-UBM on top of.  We align the si84 data for this purpose.
 
-  steps/align_fmllr.sh --nj 40 --cmd "$train_cmd" \
+  steps/align_fmllr.sh --nj 8 --cmd "$train_cmd" \
     data/train_hires data/lang exp/tri3b_ali exp/nnet2_online/tri4b_ali
 fi
 
