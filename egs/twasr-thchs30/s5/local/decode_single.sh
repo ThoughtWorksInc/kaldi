@@ -21,9 +21,15 @@ steps/make_mfcc.sh --nj 1 --cmd "$train_cmd" \
 
 steps/compute_cmvn_stats.sh data/single exp/make_mfcc/single mfcc/single
 
-# decode
 gmm-latgen-faster --max-active=7000 --beam=13.0 --lattice-beam=6.0 \
-  --acoustic-scale=0.083333 --allow-partial=true --print-args=false \
-  --word-symbol-table=exp/tri2b/graph/words.txt \
-  exp/tri2b/final.mdl exp/tri2b/graph/HCLG.fst \
-  'ark,s,cs:apply-cmvn  --utt2spk=ark:data/single/utt2spk scp:data/single/cmvn.scp scp:data/single/feats.scp ark:- | splice-feats --left-context=3 --right-context=3 ark:- ark:- | transform-feats exp/tri2b/final.mat ark:- ark:- |' 'ark:|gzip -c > exp/mono_ali/decode_single/lat.gz'
+  --acoustic-scale=0.083333 --determinize-lattice=false --allow-partial=true \
+  --word-symbol-table=exp/tri3b/graph/words.txt \
+  exp/tri3b/final.mdl exp/tri3b/graph/HCLG.fst \
+  'ark,s,cs:apply-cmvn  --utt2spk=ark:data/single/utt2spk scp:data/single/cmvn.scp scp:data/single/feats.scp ark:- | splice-feats --left-context=3 --right-context=3 ark:- ark:- | transform-feats exp/tri3b/final.mat ark:- ark:- | transform-feats --utt2spk=ark:data/single/utt2spk ark:exp/tri3b/decode_single/pre_trans.1 ark:- ark:- |' 'ark:|gzip -c > exp/tri3b/decode_single/lat.tmp.1.gz'
+
+# decode
+# gmm-latgen-faster --max-active=7000 --beam=13.0 --lattice-beam=6.0 \
+#   --acoustic-scale=0.083333 --allow-partial=true --print-args=false \
+#   --word-symbol-table=exp/tri2b/graph/words.txt \
+#   exp/tri2b/final.mdl exp/tri2b/graph/HCLG.fst \
+#   'ark,s,cs:apply-cmvn  --utt2spk=ark:data/single/utt2spk scp:data/single/cmvn.scp scp:data/single/feats.scp ark:- | splice-feats --left-context=3 --right-context=3 ark:- ark:- | transform-feats exp/tri2b/final.mat ark:- ark:- |' 'ark:|gzip -c > exp/mono_ali/decode_single/lat.gz'

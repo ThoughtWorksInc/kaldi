@@ -3,7 +3,7 @@
 . cmd.sh
 
 
-stage=1
+stage=8
 train_stage=-10
 use_gpu=true
 set -e
@@ -24,6 +24,7 @@ fi
 parallel_opts="-l gpu=1"
 num_threads=1
 minibatch_size=512
+exit_train_stage=-100
 dir=exp/nnet2_online/nnet_ms_a
 mkdir -p exp/nnet2_online
 
@@ -51,7 +52,7 @@ if [ $stage -le 8 ]; then
     --pnorm-input-dim 2000 \
     --pnorm-output-dim 250 \
     --mix-up 12000 \
-    data/train_hires data/lang exp/tri4b_ali $dir  || exit 1;
+    data/train_hires data/lang exp/nnet2_online/tri4b_ali $dir  || exit 1;
 fi
 
 if [ $stage -le 9 ]; then
